@@ -15,11 +15,11 @@ Usage
 1. Create a Snapchat account for your group by using an official client
 2. Ensure privacy settings and friendships are set as desired
 3. Create a directory "fetched-snaps" at the same level as this readme file
-	a. NOTE: You _must_ name your directory "fetched-snaps"
-	b. NOTE: You _must_ place this directory at the same level as this readme file
+  - NOTE: You _must_ name your directory "fetched-snaps"
+  - NOTE: You _must_ place this directory at the same level as this readme file
 4. Start the GroupSnap program
-	a. Compile with "javac -cp "lib/*:." groupsnap/*.java"
-	b. Run with "java -cp "lib/*:." groupsnap/GroupSnap"
+  - Compile with "javac -cp "lib/*:." groupsnap/*.java"
+  - Run with "java -cp "lib/*:." groupsnap/GroupSnap"
 5. Enter the name of your new group account
 6. Enter the password for this group
 7. Done! GroupSnap will now repost all incoming snaps
