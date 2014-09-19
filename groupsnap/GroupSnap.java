@@ -13,7 +13,8 @@ public class GroupSnap {
     
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n\n--- GroupSnap for Snapchat (v1.0) by Joe Engelman ---\n");
+        System.out.println("\n\n--- GroupSnap for Snapchat (v1.0) by Joe Engelman ---");
+        System.out.println("Tip: Have you created your \"fetched-snaps\" directory as specified in the readme?");
         System.out.println("Group username: ");
         String username = scanner.nextLine();
         Console console = System.console();
