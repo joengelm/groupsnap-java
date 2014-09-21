@@ -517,9 +517,9 @@ public class Snapchat {
                 }
             }
             List<Snap> snapsList = bindArray(snapsArray, Snap.class);
-            List<Message> messagesList = bindArray(messagesArray, Message.class);
+            // List<Message> messagesList = bindArray(messagesArray, Message.class);
             this.snaps = snapsList.toArray(new Snap[snapsList.size()]);
-            this.messages = messagesList.toArray(new Message[messagesList.size()]);
+            this.messages = new Message[0]; // messagesList.toArray(new Message[messagesList.size()]);
         } catch (JSONException e) {
             this.snaps = new Snap[0];
             this.messages = new Message[0];

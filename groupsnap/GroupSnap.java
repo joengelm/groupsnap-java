@@ -36,12 +36,12 @@ public class GroupSnap {
                     snapchat.setProxied(false);
                     System.out.println(getCurrentTime() + "\tFetching snaps...");
                     fetchSnaps();
-                    File dir = new File("../fetched-snaps/");
+                    File dir = new File("fetched-snaps/");
                     File[] directoryListing = dir.listFiles();
                     if (directoryListing != null) {
                         snapchat.setProxied(false);
                         for (File fetchedSnap : directoryListing) {
-                            String storyFileName = "../fetched-snaps/" + fetchedSnap.getName();
+                            String storyFileName = "fetched-snaps/" + fetchedSnap.getName();
                             int timeToDisplay = Integer.parseInt(fetchedSnap.getName().split("-")[0]);
                             boolean result = setStory(username, storyFileName, timeToDisplay);
                             if (result) {
@@ -79,7 +79,7 @@ public class GroupSnap {
             if (s.isImage()) {
                 System.out.println(getCurrentTime() + "\tDownloading a snap from '" + s.getSender() + "'.");
                 byte[] snapBytes = snapchat.getSnap(s);
-                File snapFile = new File("../fetched-snaps/" + s.getTime() + "-" + s.getSender() + "-" + s.getId() + ".jpg");
+                File snapFile = new File("fetched-snaps/" + s.getTime() + "-" + s.getSender() + "-" + s.getId() + ".jpg");
                 FileOutputStream snapOs = new FileOutputStream(snapFile);
                 snapOs.write(snapBytes);
                 snapOs.close();

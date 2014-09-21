@@ -81,7 +81,7 @@ public class Message implements JSONBinder<Message> {
             this.type = body.getString(TYPE_KEY);
             if(this.type.equalsIgnoreCase(TYPE_MEDIA)){
                 JSONObject media = body.getJSONObject(MEDIA_KEY);
-                this.width = media.getInt(WIDTH_KEY);
+                // this.width = media.getInt(WIDTH_KEY);    this line has been drawing a json exception
                 this.height = media.getInt(HEIGHT_KEY);
                 this.media_id = media.getString(MEDIA_ID_KEY);
                 this.key = media.getString(KEY_KEY);
