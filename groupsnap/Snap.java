@@ -200,7 +200,7 @@ public class Snap implements JSONBinder<Snap> {
      *
      * @return last interaction time.
      */
-    public long getLastInteractionTime(){
+    public long getLastInteractionTime() {
         return this.lastInteractionTime;
     }
 

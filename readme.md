@@ -14,8 +14,8 @@ Usage
 
 1. Create a Snapchat account for your group by using an official client
 2. Ensure privacy settings and friendships are set as desired
-3. Create a directory "fetched-snaps" at the same level as this readme file
-  - NOTE: You _must_ name your directory "fetched-snaps"
+3. Create a directory "<username>" at the same level as this readme file
+  - NOTE: You _must_ name your directory the username of each GroupSnap account you plan on running
   - NOTE: You _must_ place this directory at the same level as this readme file
 4. Start the GroupSnap program
   - Compile with "javac -cp "lib/*:." groupsnap/*.java"
