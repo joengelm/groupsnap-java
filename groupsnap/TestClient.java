@@ -88,7 +88,7 @@ public class TestClient {
             if (s.isImage()) {
                 System.out.println("Downloading snap from " + s.getSender());
                 byte[] snapBytes = snapchat.getSnap(s);
-                File snapFile = new File(s.getSender() + "-" + s.getId() + ".jpg");
+                File snapFile = new File(s.getTime() + "-" + s.getSender() + "-" + s.getId() + ".jpg");
                 FileOutputStream snapOs = new FileOutputStream(snapFile);
                 snapOs.write(snapBytes);
                 snapOs.close();
@@ -122,21 +122,13 @@ public class TestClient {
     
     public static void setStory(String username, String filename)
             throws FileNotFoundException {
-
-        boolean video = false; //TODO(liamcottle) upload video snaps from command line.
-        // Get file
-        File file = new File(filename);
-
-        // Send and print
-        System.out.println("Setting...");
-        boolean postStory = false; //set as true to make this your story as well...
-
-        // TODO(samstern): User-specified time, not automatically 10 seconds
-        boolean result = snapchat.sendStory(file, video, 10, "My Story");
-        if (result) {
-            System.out.println("Set.");
-        } else {
-            System.out.println("Could not set.");
+        boolean video = false;
+        if (filename.substring(filename.length() - 4).equals("mp4")) {
+            video = true;
         }
+        int time = Integer.parseInt(filename.split("-")[0]);
+        File file = new File(filename);
+        boolean result = snapchat.sendStory(file, video, time, "My Story");
+        System.out.println(result);
     }
 }

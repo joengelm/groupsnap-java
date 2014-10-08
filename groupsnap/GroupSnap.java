@@ -18,24 +18,27 @@ public class GroupSnap {
         System.out.println("Group username: ");
         String username = scanner.nextLine();
         Console console = System.console();
-        String password = new String(console.readPassword("Group password (typing will be hidden): "));
+        String password = new String(console.readPassword("Group password (typing will be hidden): \n"));
 
-        System.out.println(getCurrentTime() + "\t" + username + "\tInitializing...");
+        File logfile = new File("gs.log");
+        Logger l = new Logger(logfile, username);
+
+        l.log("Initializing...");
 
         while (true) {
             try {
-                System.out.println(getCurrentTime() + "\t" + username + "\tLogging in...");
+                l.log("Logging in...");
                 while (true) {
                     snapchat = Snapchat.login(username, password, true);
                     if (snapchat != null) {
-                        System.out.println(getCurrentTime() + "\t" + username + "\tLogged in.");
+                        l.log("Logged in.");
                     } else {
-                        System.out.println(getCurrentTime() + "\t" + username + "\tFailed to log in.");
+                        l.log("Failed to log in.");
                         continue;
                     }
                     snapchat.setProxied(false);
-                    System.out.println(getCurrentTime() + "\t" + username + "\tFetching snaps...");
-                    fetchSnaps(username);
+                    l.log("Fetching snaps...");
+                    fetchSnaps(username, l);
                     File dir = new File(username + "/");
                     File[] directoryListing = dir.listFiles();
                     if (directoryListing != null) {
@@ -46,56 +49,57 @@ public class GroupSnap {
                                 continue;
                             }
                             int timeToDisplay = Integer.parseInt(fetchedSnap.getName().split("-")[0]);
+                            String userWhoSentSnap = fetchedSnap.getName().split("-")[1];
                             boolean result = setStory(username, storyFileName, timeToDisplay);
                             if (result) {
-                                System.out.println(getCurrentTime() + "\t" + username + "\tPosted a snap by '" + fetchedSnap.getName().split("-")[1] + "'.");
+                                l.log("Posted a snap by '" + userWhoSentSnap + "'.");
                                 fetchedSnap.delete();
                             } else {
-                                System.out.println(getCurrentTime() + "\t" + username + "\tFailed to post a snap by '" + fetchedSnap.getName().split("-")[1] + "'.");
+                                l.log("Failed to post a snap by '" + userWhoSentSnap + "'.");
                             }
                         }
                         snapchat.setProxied(true);
                     }
                     try {
-                        System.out.println(getCurrentTime() + "\t" + username + "\tSleeping...");
-                        Thread.sleep(300000);   // 1000 milliseconds is one second.
-                        System.out.println(getCurrentTime() + "\t" + username + "\tLogging in...");
+                        int sleepSeconds = 300;
+                        l.log("Sleeping for " + sleepSeconds + " seconds...");
+                        Thread.sleep(sleepSeconds*1000);   // 1000 milliseconds is one second.
+                        l.log("Logging in...");
                     } catch (InterruptedException ex) {
-                        System.out.println(getCurrentTime() + "\t" + username + "\tThread could not sleep.");
+                        l.log("Thread could not sleep.");
                         Thread.currentThread().interrupt();
-                        System.out.println(getCurrentTime() + "\t" + username + "\tLogging in...");
+                        l.log("Logging in after sleep interruption...");
                     }
                 }
             }
             catch (Exception e) {
-                System.out.println(getCurrentTime() + "\t" + username + "\tRestarting loop due to: " + e);
-                e.printStackTrace();
+                l.log("Restarting loop due to: " + e);
             }
         }
     }
 
-    public static void fetchSnaps(String username) throws IOException {
+    public static void fetchSnaps(String username, Logger l) throws IOException {
         // Try fetching all snaps
         Snap[] snapObjs = snapchat.getSnaps();
         Snap[] downloadable = Snap.filterDownloadable(snapObjs);
         for (Snap s : downloadable) {
             if (s.isImage()) {
-                System.out.println(getCurrentTime() + "\t" + username + "\tDownloading a snap (picture) from '" + s.getSender() + "'.");
+                l.log("Downloading a snap (picture) from '" + s.getSender() + "'.");
                 byte[] snapBytes = snapchat.getSnap(s);
                 File snapFile = new File(username + "/" + s.getTime() + "-" + s.getSender() + "-" + s.getId() + ".jpg");
                 FileOutputStream snapOs = new FileOutputStream(snapFile);
                 snapOs.write(snapBytes);
                 snapOs.close();
                 snapchat.setSnapFlags(s, true, false, false);
-            } /*else if (s.isVideo()) {
-                System.out.println(getCurrentTime() + "\t" + username + "\tDownloading a snap (video) from '" + s.getSender() + "'.");
+            } /* else if (s.isVideo()) {
+                l.log("Downloading a snap (video) from '" + s.getSender() + "'.");
                 byte[] snapBytes = snapchat.getSnap(s);
                 File snapFile = new File(username + "/" + s.getTime() + "-" + s.getSender() + "-" + s.getId() + ".mp4");
                 FileOutputStream snapOs = new FileOutputStream(snapFile);
                 snapOs.write(snapBytes);
                 snapOs.close();
                 snapchat.setSnapFlags(s, true, false, false);
-            }*/
+            } */
         }
     }
     

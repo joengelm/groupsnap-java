@@ -633,6 +633,7 @@ public class Snapchat {
             if (resp.getCode() == 200 || resp.getCode() == 202) {
                 return true;
             } else {
+                System.out.println("Upload failed with code: " + resp.getBody());
                 return false;
             }
         } catch (UnirestException e) {
