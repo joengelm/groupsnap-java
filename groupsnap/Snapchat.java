@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.body.MultipartBody;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -762,7 +763,8 @@ public class Snapchat {
     private String upload(File image, boolean video) {
         try {
             // Open file and ecnrypt it
-            byte[] fileBytes = IOUtils.toByteArray(new FileInputStream(image));
+        	FileInputStream fis = new FileInputStream(image);
+            byte[] fileBytes = IOUtils.toByteArray(fis);
             byte[] encryptedBytes = Encryption.encrypt(fileBytes);
 
             // Write to a temporary file
@@ -770,7 +772,13 @@ public class Snapchat {
 
             FileOutputStream fos = new FileOutputStream(encryptedFile);
             fos.write(encryptedBytes);
-            fos.close();
+            
+            fis.close();
+    		fis = null;
+    		fos.flush();
+    		fos.close();
+    		fos = null;
+    		System.gc();
 
             // Create other params
             Long timestamp = getTimestamp();
@@ -798,6 +806,9 @@ public class Snapchat {
                 System.out.println("Upload failed, Response Code: " + resp.getCode());
                 return null;
             }
+    		
+
+    		
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -813,9 +824,8 @@ public class Snapchat {
         } catch(OutOfMemoryError e){
             e.printStackTrace();
             return null;
-        }
+        } 
     }
-
     /**
      * Add a friend
      *
