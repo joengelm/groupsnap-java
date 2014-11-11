@@ -27,6 +27,7 @@ public class TestClient {
             return;
         }
 
+        snapchat.setProxied(false);
         // Ask the user what they want to do
         System.out.println();
         System.out.println("Choose an option:");
@@ -92,6 +93,13 @@ public class TestClient {
                 FileOutputStream snapOs = new FileOutputStream(snapFile);
                 snapOs.write(snapBytes);
                 snapOs.close();
+            } else {
+                System.out.println("Downloading snap video from " + s.getSender());
+                byte[] snapBytes = snapchat.getSnap(s);
+                File snapFile = new File(s.getTime() + "-" + s.getSender() + "-" + s.getId() + ".mp4");
+                FileOutputStream snapOs = new FileOutputStream(snapFile);
+                snapOs.write(snapBytes);
+                snapOs.close();
             }
         }
         System.out.println("Done.");
@@ -126,7 +134,11 @@ public class TestClient {
         if (filename.substring(filename.length() - 4).equals("mp4")) {
             video = true;
         }
-        int time = Integer.parseInt(filename.split("-")[0]);
+        int time = 10;
+        try {
+            time = Integer.parseInt(filename.split("-")[0]);
+        } catch (Exception e) {}
+
         File file = new File(filename);
         boolean result = snapchat.sendStory(file, video, time, "My Story");
         System.out.println(result);
